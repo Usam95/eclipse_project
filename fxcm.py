@@ -6,6 +6,8 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 plt.style.use("seaborn")
 
+from strategies.MACDBacktester import MACDBacktester as MACDTester
+
 class MACDTrader():
     
     def __init__(self, instrument, bar_length, EMA_S, EMA_L, signal_mw, units):
@@ -18,7 +20,7 @@ class MACDTrader():
         self.last_bar = None  
         self.units = units
         self.position = 0
-        
+        self.tc = 0.00007
         #*****************add strategy-specific attributes here******************
         self.EMA_S = EMA_S
         self.EMA_L = EMA_L
@@ -28,7 +30,20 @@ class MACDTrader():
     def connect(self):
         self.api = fxcmpy.fxcmpy(config_file= "fxcm.cfg")
 
-    def get_most_recent(self, period = "m5", number = 500):
+    def compute_optimal_parameters(self):
+        df = self.raw_data.copy()
+        df["Close"] = df[self.instrument]
+        macdTester = MACDTester(self.instrument, df, self.EMA_S, self.EMA_L, self.signal_mw, self.tc)
+        macdTester.optimize_parameters((5,20,1), (21,50,1), (5,20,1))
+        print("MACD Test Results: ",macdTester.test_strategy())
+        parameters =  macdTester.get_parameters()
+        self.EMA_S = parameters[0]
+        self.EMA_L = parameters[1]
+        self.signal_mw = parameters[2]
+        print("MACD parameters: ", parameters)
+        self.EMA_S, self.EMA_L, self.signal_mw = macdTester.get_parameters()
+                        
+    def get_most_recent(self, period = "m5", number = 10000):
         while True:  
             time.sleep(5)
             df = self.api.get_candles(self.instrument, number = number, period = period, columns = ["bidclose", "askclose"])
@@ -53,6 +68,7 @@ class MACDTrader():
             self.tick_data[self.instrument] = (self.tick_data.Ask + self.tick_data.Bid)/2
             self.tick_data = self.tick_data[self.instrument].to_frame()
             self.resample_and_join()
+            self.compute_optimal_parameters()
             self.define_strategy() 
             self.execute_trades()
             
@@ -143,20 +159,21 @@ class MACDTrader():
 if __name__ == "__main__":
     instrument = "ETH/USD"
     bar_size = "5min"
-    ema_s = 19
-    ema_l = 23
-    signal = 10
+    ema_s = 12
+    ema_l = 16
+    signal = 9
     
-    start = time.time()
-    while(True): 
-        
-        trader = MACDTrader(instrument, bar_size, ema_s, ema_l, signal, 1)
-        #trader.connect()
-        #api.close()
-        api = fxcmpy.fxcmpy(config_file= "fxcm.cfg")
-        trader.get_most_recent()
-        trader.api.subscribe_market_data(instrument, (trader.get_tick_data, ))
-        trader.api.unsubscribe_market_data(instrument)
-        
-        time.sleep(300 - ((time.time() - start) % 300.0))
+    trader = MACDTrader(instrument, bar_size, ema_s, ema_l, signal, 1)
+    api = fxcmpy.fxcmpy(config_file= "fxcm.cfg")
+    
+    trader.get_most_recent()
+    api.subscribe_market_data(instrument, (trader.get_tick_data, ))
+    
+    starttime = time.time()
+    timeout = time.time() + 60*60*6
+    while time.time() <= timeout:
+        time.sleep(900 - ((time.time() - starttime) % 900.0))
+        api.unsubscribe_market_data(instrument)
+        api.close()
+
     
