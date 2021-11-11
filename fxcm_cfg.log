@@ -1,0 +1,384 @@
+|ERROR|2021-11-10 22:03:41,405|Connection error: None
+|ERROR|2021-11-10 22:03:43,151|Connection error: None
+|ERROR|2021-11-10 22:03:43,366|Connection error: None
+|ERROR|2021-11-10 22:03:47,741|Connection error: None
+|ERROR|2021-11-10 22:03:48,133|Connection error: None
+|ERROR|2021-11-10 22:03:52,847|Connection error: None
+|ERROR|2021-11-10 22:03:52,854|Connection error: None
+|ERROR|2021-11-10 22:03:57,665|Connection error: None
+|ERROR|2021-11-10 22:03:57,882|Connection error: None
+|ERROR|2021-11-10 22:04:02,741|Connection error: None
+|ERROR|2021-11-10 22:04:02,742|Connection error: None
+|ERROR|2021-11-10 22:04:12,372|Server reports an error: {'executed': False, 'error': 'Unauthorized'}.
+|ERROR|2021-11-10 22:04:12,373|URL: https://api-demo.fxcm.com:443/trading/get_model?models=Order
+|ERROR|2021-11-10 22:04:12,374|Headers: {'User-Agent': 'request', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': 'application/json', 'Connection': 'keep-alive', 'Authorization': 'Bearer 8GIVdItNQ9AL042QBqwc57e620bb8e7cf67b7b515488ac1281016a3a21d4', 'Content-Type': 'application/x-www-form-urlencoded'}
+|ERROR|2021-11-10 22:04:12,374|Params: {'models': ['Order']}
+|ERROR|2021-11-10 22:04:12,374|Bearer token: Bearer 8GIVdItNQ9AL042QBqwc57e620bb8e7cf67b7b515488ac1281016a3a21d4
+|ERROR|2021-11-10 22:04:12,374|Connection status: unset
+|ERROR|2021-11-10 22:04:12,374|Socket session id: 8GIVdItNQ9AL042QBqwc
+|ERROR|2021-11-10 22:04:12,374|Can not parse server answer to json object: {"response":{"executed":false,"error":"Unauthorized"}}.
+|ERROR|2021-11-10 22:04:20,643|Connection error: None
+|ERROR|2021-11-10 22:04:22,404|Connection error: None
+|ERROR|2021-11-10 22:04:23,946|Connection error: None
+|ERROR|2021-11-10 22:04:27,005|Connection error: None
+|ERROR|2021-11-10 22:04:28,956|Connection error: None
+|ERROR|2021-11-10 22:04:32,637|Connection error: None
+|ERROR|2021-11-10 22:04:33,640|Connection error: None
+|ERROR|2021-11-10 22:04:37,750|Connection error: None
+|ERROR|2021-11-10 22:04:39,055|Connection error: None
+|ERROR|2021-11-10 22:04:42,898|Connection error: None
+|ERROR|2021-11-10 22:04:43,729|Connection error: None
+|ERROR|2021-11-10 22:04:56,218|Connection error: None
+|ERROR|2021-11-10 22:04:57,893|Connection error: None
+|ERROR|2021-11-10 22:04:59,983|Connection error: None
+|ERROR|2021-11-10 22:05:01,770|Connection error: None
+|ERROR|2021-11-10 22:05:04,827|Connection error: None
+|ERROR|2021-11-10 22:05:06,521|Connection error: None
+|ERROR|2021-11-10 22:05:10,437|Connection error: None
+|ERROR|2021-11-10 22:05:12,069|Connection error: None
+|ERROR|2021-11-10 22:05:15,265|Connection error: None
+|ERROR|2021-11-10 22:05:15,409|Connection error: None
+|ERROR|2021-11-10 22:05:16,269|Connection error: None
+|ERROR|2021-11-10 22:05:16,970|Connection error: None
+|ERROR|2021-11-10 22:05:17,523|Connection error: None
+|ERROR|2021-11-10 22:05:18,703|Connection error: None
+|ERROR|2021-11-10 22:05:20,650|Connection error: None
+|ERROR|2021-11-10 22:05:21,566|Connection error: None
+|ERROR|2021-11-10 22:05:22,384|Connection error: None
+|ERROR|2021-11-10 22:05:22,442|Connection error: None
+|ERROR|2021-11-10 22:05:26,501|Connection error: None
+|ERROR|2021-11-10 22:05:27,406|Connection error: None
+|ERROR|2021-11-10 22:05:31,702|Connection error: None
+|ERROR|2021-11-10 22:05:32,522|Connection error: None
+|ERROR|2021-11-10 22:05:36,638|Connection error: None
+|ERROR|2021-11-10 22:05:38,136|Connection error: None
+|ERROR|2021-11-10 22:06:17,914|Connection error: None
+|ERROR|2021-11-10 22:06:20,005|Connection error: None
+|ERROR|2021-11-10 22:06:21,404|Connection error: None
+|ERROR|2021-11-10 22:06:24,344|Connection error: None
+|ERROR|2021-11-10 22:06:26,547|Connection error: None
+|ERROR|2021-11-10 22:06:29,794|Connection error: None
+|ERROR|2021-11-10 22:06:31,403|Connection error: None
+|ERROR|2021-11-10 22:06:34,598|Connection error: None
+|ERROR|2021-11-10 22:06:36,527|Connection error: None
+|ERROR|2021-11-10 22:06:39,666|Connection error: None
+|ERROR|2021-11-10 22:06:41,320|Connection error: None
+|ERROR|2021-11-10 22:06:53,963|Connection error: None
+|ERROR|2021-11-10 22:06:56,193|Connection error: None
+|ERROR|2021-11-10 22:06:57,237|Connection error: None
+|ERROR|2021-11-10 22:07:00,622|Connection error: None
+|ERROR|2021-11-10 22:07:02,621|Connection error: None
+|ERROR|2021-11-10 22:07:05,287|Connection error: None
+|ERROR|2021-11-10 22:07:07,726|Connection error: None
+|ERROR|2021-11-10 22:07:10,246|Connection error: None
+|ERROR|2021-11-10 22:07:13,088|Connection error: None
+|ERROR|2021-11-10 22:07:15,865|Connection error: None
+|ERROR|2021-11-10 22:07:18,398|Connection error: None
+|ERROR|2021-11-10 22:07:27,133|Connection error: None
+|ERROR|2021-11-10 22:07:28,888|Connection error: None
+|ERROR|2021-11-10 22:07:29,582|Connection error: None
+|ERROR|2021-11-10 22:07:34,057|Connection error: None
+|ERROR|2021-11-10 22:07:34,103|Connection error: None
+|ERROR|2021-11-10 22:07:39,423|Connection error: None
+|ERROR|2021-11-10 22:07:39,500|Connection error: None
+|ERROR|2021-11-10 22:08:47,323|Connection error: None
+|ERROR|2021-11-10 22:08:49,951|Connection error: None
+|ERROR|2021-11-10 22:08:54,402|Connection error: None
+|ERROR|2021-11-10 22:08:59,218|Connection error: None
+|ERROR|2021-11-10 22:09:04,807|Connection error: None
+|ERROR|2021-11-10 22:09:09,455|Connection error: None
+|ERROR|2021-11-10 22:09:18,079|Socket returns unknown error.
+|ERROR|2021-11-10 22:09:18,080|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:09:24,138|Connection error: None
+|ERROR|2021-11-10 22:09:25,870|Connection error: None
+|ERROR|2021-11-10 22:09:30,289|Connection error: None
+|ERROR|2021-11-10 22:09:35,213|Connection error: None
+|ERROR|2021-11-10 22:12:53,460|Connection error: None
+|ERROR|2021-11-10 22:12:53,461|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:53,462|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:53,590|Connection error: None
+|ERROR|2021-11-10 22:12:53,591|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:53,591|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:53,712|Connection error: None
+|ERROR|2021-11-10 22:12:53,712|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:53,712|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:53,823|Connection error: None
+|ERROR|2021-11-10 22:12:53,823|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:53,824|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:53,979|Connection error: None
+|ERROR|2021-11-10 22:12:53,979|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:53,979|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:54,088|Connection error: None
+|ERROR|2021-11-10 22:12:54,088|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:54,088|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:54,216|Connection error: None
+|ERROR|2021-11-10 22:12:54,216|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:54,216|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:54,318|Connection error: None
+|ERROR|2021-11-10 22:12:54,319|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:54,319|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:54,436|Connection error: None
+|ERROR|2021-11-10 22:12:54,437|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:54,437|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:54,549|Connection error: None
+|ERROR|2021-11-10 22:12:54,550|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:54,550|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:54,661|Connection error: None
+|ERROR|2021-11-10 22:12:54,661|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:54,661|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:54,780|Connection error: None
+|ERROR|2021-11-10 22:12:54,780|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:54,780|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:54,891|Connection error: None
+|ERROR|2021-11-10 22:12:54,891|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:54,892|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:55,009|Connection error: None
+|ERROR|2021-11-10 22:12:55,009|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:55,009|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:55,137|Connection error: None
+|ERROR|2021-11-10 22:12:55,137|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:55,137|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:56,249|Connection error: None
+|ERROR|2021-11-10 22:12:56,249|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:56,249|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:56,351|Connection error: None
+|ERROR|2021-11-10 22:12:56,352|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:56,352|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:12:56,482|Connection error: None
+|ERROR|2021-11-10 22:12:56,482|Socket returns unknown error.
+|ERROR|2021-11-10 22:12:56,482|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:13:27,729|Connection error: None
+|ERROR|2021-11-10 22:13:27,865|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:13:30,256|Connection error: None
+|ERROR|2021-11-10 22:13:34,393|Connection error: None
+|ERROR|2021-11-10 22:13:39,010|Connection error: None
+|ERROR|2021-11-10 22:13:43,660|Connection error: None
+|ERROR|2021-11-10 22:13:49,131|Connection error: None
+|ERROR|2021-11-10 22:14:04,764|Connection error: None
+|ERROR|2021-11-10 22:14:07,032|Connection error: None
+|ERROR|2021-11-10 22:14:11,201|Connection error: None
+|ERROR|2021-11-10 22:14:16,329|Connection error: None
+|ERROR|2021-11-10 22:14:21,355|Connection error: None
+|ERROR|2021-11-10 22:14:26,821|Connection error: None
+|ERROR|2021-11-10 22:14:32,290|Connection error: None
+|ERROR|2021-11-10 22:14:45,481|Connection error: None
+|ERROR|2021-11-10 22:14:45,941|Connection error: None
+|ERROR|2021-11-10 22:14:45,941|Socket returns unknown error.
+|ERROR|2021-11-10 22:14:45,941|Connection aborted, failed to reconnect
+|ERROR|2021-11-10 22:14:47,835|Connection error: None
+|ERROR|2021-11-10 22:14:51,974|Connection error: None
+|ERROR|2021-11-10 22:14:57,504|Connection error: None
+|ERROR|2021-11-10 22:15:02,418|Connection error: None
+|ERROR|2021-11-10 22:15:07,126|Connection error: None
+|ERROR|2021-11-10 22:15:19,977|Connection error: None
+|ERROR|2021-11-10 22:15:22,525|Connection error: None
+|ERROR|2021-11-10 22:15:27,071|Connection error: None
+|ERROR|2021-11-10 22:15:32,638|Connection error: None
+|ERROR|2021-11-10 22:15:37,664|Connection error: None
+|ERROR|2021-11-10 22:15:42,293|Connection error: None
+|ERROR|2021-11-10 22:15:53,148|Connection error: None
+|ERROR|2021-11-10 22:15:55,039|Connection error: None
+|ERROR|2021-11-10 22:15:58,887|Connection error: None
+|ERROR|2021-11-10 22:16:03,781|Connection error: None
+|ERROR|2021-11-10 22:16:08,977|Connection error: None
+|ERROR|2021-11-10 22:16:14,297|Connection error: None
+|ERROR|2021-11-10 22:16:19,605|Connection error: None
+|ERROR|2021-11-10 22:16:29,838|Connection error: None
+|ERROR|2021-11-10 22:16:31,520|Connection error: None
+|ERROR|2021-11-10 22:16:35,849|Connection error: None
+|ERROR|2021-11-10 22:16:41,276|Connection error: None
+|ERROR|2021-11-10 22:16:46,426|Connection error: None
+|ERROR|2021-11-10 22:16:51,756|Connection error: None
+|ERROR|2021-11-10 22:16:56,594|Connection error: None
+|ERROR|2021-11-10 22:17:08,242|Connection error: None
+|ERROR|2021-11-10 22:17:10,309|Connection error: None
+|ERROR|2021-11-10 22:17:14,747|Connection error: None
+|ERROR|2021-11-10 22:17:20,013|Connection error: None
+|ERROR|2021-11-10 22:17:25,224|Connection error: None
+|ERROR|2021-11-10 22:17:30,607|Connection error: None
+|ERROR|2021-11-10 22:17:42,573|Connection error: None
+|ERROR|2021-11-10 22:17:44,801|Connection error: None
+|ERROR|2021-11-10 22:17:48,699|Connection error: None
+|ERROR|2021-11-10 22:17:53,497|Connection error: None
+|ERROR|2021-11-10 22:17:58,370|Connection error: None
+|ERROR|2021-11-10 22:18:03,591|Connection error: None
+|ERROR|2021-11-10 22:18:09,015|Connection error: None
+|ERROR|2021-11-10 22:18:20,141|Connection error: None
+|ERROR|2021-11-10 22:18:22,749|Connection error: None
+|ERROR|2021-11-10 22:18:26,580|Connection error: None
+|ERROR|2021-11-10 22:18:31,431|Connection error: None
+|ERROR|2021-11-10 22:18:36,775|Connection error: None
+|ERROR|2021-11-10 22:18:42,164|Connection error: None
+|ERROR|2021-11-10 22:18:47,400|Connection error: None
+|ERROR|2021-11-10 22:18:58,200|Connection error: None
+|ERROR|2021-11-10 22:19:00,090|Connection error: None
+|ERROR|2021-11-10 22:19:04,690|Connection error: None
+|ERROR|2021-11-10 22:19:09,604|Connection error: None
+|ERROR|2021-11-10 22:19:14,942|Connection error: None
+|ERROR|2021-11-10 22:19:19,668|Connection error: None
+|ERROR|2021-11-10 22:19:24,415|Connection error: None
+|ERROR|2021-11-10 22:19:35,410|Connection error: None
+|ERROR|2021-11-10 22:19:37,305|Connection error: None
+|ERROR|2021-11-10 22:19:41,619|Connection error: None
+|ERROR|2021-11-10 22:19:46,490|Connection error: None
+|ERROR|2021-11-10 22:19:51,485|Connection error: None
+|ERROR|2021-11-10 22:19:56,860|Connection error: None
+|ERROR|2021-11-10 22:20:02,147|Connection error: None
+|ERROR|2021-11-10 22:20:12,788|Connection error: None
+|ERROR|2021-11-10 22:20:14,754|Connection error: None
+|ERROR|2021-11-10 22:20:19,287|Connection error: None
+|ERROR|2021-11-10 22:20:24,743|Connection error: None
+|ERROR|2021-11-10 22:20:29,769|Connection error: None
+|ERROR|2021-11-10 22:20:35,128|Connection error: None
+|ERROR|2021-11-10 22:20:40,168|Connection error: None
+|ERROR|2021-11-10 22:20:54,208|Connection error: None
+|ERROR|2021-11-10 22:20:56,311|Connection error: None
+|ERROR|2021-11-10 22:21:00,119|Connection error: None
+|ERROR|2021-11-10 22:21:05,684|Connection error: None
+|ERROR|2021-11-10 22:21:11,121|Connection error: None
+|ERROR|2021-11-10 22:21:16,517|Connection error: None
+|ERROR|2021-11-10 22:21:21,333|Connection error: None
+|ERROR|2021-11-10 22:21:33,770|Connection error: None
+|ERROR|2021-11-10 22:21:35,467|Connection error: None
+|ERROR|2021-11-10 22:21:39,808|Connection error: None
+|ERROR|2021-11-10 22:21:45,285|Connection error: None
+|ERROR|2021-11-10 22:21:50,241|Connection error: None
+|ERROR|2021-11-10 22:21:55,618|Connection error: None
+|ERROR|2021-11-10 22:22:01,181|Connection error: None
+|ERROR|2021-11-10 22:22:12,541|Connection error: None
+|ERROR|2021-11-10 22:22:14,240|Connection error: None
+|ERROR|2021-11-10 22:22:18,514|Connection error: None
+|ERROR|2021-11-10 22:22:23,936|Connection error: None
+|ERROR|2021-11-10 22:22:29,349|Connection error: None
+|ERROR|2021-11-10 22:22:34,280|Connection error: None
+|ERROR|2021-11-10 22:22:39,417|Connection error: None
+|ERROR|2021-11-10 22:22:50,278|Connection error: None
+|ERROR|2021-11-10 22:22:52,670|Connection error: None
+|ERROR|2021-11-10 22:22:56,651|Connection error: None
+|ERROR|2021-11-10 22:23:01,491|Connection error: None
+|ERROR|2021-11-10 22:23:06,426|Connection error: None
+|ERROR|2021-11-10 22:23:11,141|Connection error: None
+|ERROR|2021-11-10 22:23:16,467|Connection error: None
+|ERROR|2021-11-10 22:23:28,438|Connection error: None
+|ERROR|2021-11-10 22:23:30,794|Connection error: None
+|ERROR|2021-11-10 22:23:35,071|Connection error: None
+|ERROR|2021-11-10 22:23:40,542|Connection error: None
+|ERROR|2021-11-10 22:23:45,411|Connection error: None
+|ERROR|2021-11-10 22:23:50,914|Connection error: None
+|ERROR|2021-11-10 22:23:55,674|Connection error: None
+|ERROR|2021-11-10 22:24:06,817|Connection error: None
+|ERROR|2021-11-10 22:24:08,851|Connection error: None
+|ERROR|2021-11-10 22:24:13,228|Connection error: None
+|ERROR|2021-11-10 22:24:18,442|Connection error: None
+|ERROR|2021-11-10 22:24:23,150|Connection error: None
+|ERROR|2021-11-10 22:24:28,425|Connection error: None
+|ERROR|2021-11-10 22:24:33,593|Connection error: None
+|ERROR|2021-11-10 22:24:44,867|Connection error: None
+|ERROR|2021-11-10 22:24:47,083|Connection error: None
+|ERROR|2021-11-10 22:24:50,743|Connection error: None
+|ERROR|2021-11-10 22:24:56,051|Connection error: None
+|ERROR|2021-11-10 22:25:01,257|Connection error: None
+|ERROR|2021-11-10 22:25:06,185|Connection error: None
+|ERROR|2021-11-10 22:25:11,580|Connection error: None
+|ERROR|2021-11-10 22:25:23,350|Connection error: None
+|ERROR|2021-11-10 22:25:25,339|Connection error: None
+|ERROR|2021-11-10 22:25:29,845|Connection error: None
+|ERROR|2021-11-10 22:25:35,121|Connection error: None
+|ERROR|2021-11-10 22:25:40,240|Connection error: None
+|ERROR|2021-11-10 22:25:45,337|Connection error: None
+|ERROR|2021-11-10 22:25:50,302|Connection error: None
+|ERROR|2021-11-10 22:26:01,679|Connection error: None
+|ERROR|2021-11-10 22:26:03,820|Connection error: None
+|ERROR|2021-11-10 22:26:08,152|Connection error: None
+|ERROR|2021-11-10 22:26:13,214|Connection error: None
+|ERROR|2021-11-10 22:26:18,860|Connection error: None
+|ERROR|2021-11-10 22:26:24,061|Connection error: None
+|ERROR|2021-11-10 22:26:28,986|Connection error: None
+|ERROR|2021-11-10 22:26:39,267|Connection error: None
+|ERROR|2021-11-10 22:26:41,818|Connection error: None
+|ERROR|2021-11-10 22:26:46,022|Connection error: None
+|ERROR|2021-11-10 22:26:50,790|Connection error: None
+|ERROR|2021-11-10 22:26:56,278|Connection error: None
+|ERROR|2021-11-10 22:27:01,686|Connection error: None
+|ERROR|2021-11-10 22:27:07,061|Connection error: None
+|ERROR|2021-11-10 22:27:18,543|Connection error: None
+|ERROR|2021-11-10 22:27:20,478|Connection error: None
+|ERROR|2021-11-10 22:27:24,169|Connection error: None
+|ERROR|2021-11-10 22:27:28,974|Connection error: None
+|ERROR|2021-11-10 22:27:34,018|Connection error: None
+|ERROR|2021-11-10 22:27:38,669|Connection error: None
+|ERROR|2021-11-10 22:27:43,884|Connection error: None
+|ERROR|2021-11-10 22:27:55,609|Connection error: None
+|ERROR|2021-11-10 22:27:57,442|Connection error: None
+|ERROR|2021-11-10 22:28:01,294|Connection error: None
+|ERROR|2021-11-10 22:28:06,065|Connection error: None
+|ERROR|2021-11-10 22:28:11,266|Connection error: None
+|ERROR|2021-11-10 22:28:16,839|Connection error: None
+|ERROR|2021-11-10 22:28:21,699|Connection error: None
+|ERROR|2021-11-10 22:28:33,528|Connection error: None
+|ERROR|2021-11-10 22:28:35,993|Connection error: None
+|ERROR|2021-11-10 22:28:40,591|Connection error: None
+|ERROR|2021-11-10 22:28:45,978|Connection error: None
+|ERROR|2021-11-10 22:28:51,146|Connection error: None
+|ERROR|2021-11-10 22:28:56,415|Connection error: None
+|ERROR|2021-11-10 22:29:01,701|Connection error: None
+|ERROR|2021-11-10 22:29:12,235|Connection error: None
+|ERROR|2021-11-10 22:29:14,381|Connection error: None
+|ERROR|2021-11-10 22:29:18,706|Connection error: None
+|ERROR|2021-11-10 22:29:23,523|Connection error: None
+|ERROR|2021-11-10 22:29:28,625|Connection error: None
+|ERROR|2021-11-10 22:29:33,562|Connection error: None
+|ERROR|2021-11-10 22:29:38,460|Connection error: None
+|ERROR|2021-11-10 22:29:48,568|Connection error: None
+|ERROR|2021-11-10 22:29:50,631|Connection error: None
+|ERROR|2021-11-10 22:29:55,241|Connection error: None
+|ERROR|2021-11-10 22:30:00,841|Connection error: None
+|ERROR|2021-11-10 22:30:06,318|Connection error: None
+|ERROR|2021-11-10 23:30:17,382|Connection error: None
+|ERROR|2021-11-10 23:30:19,832|Connection error: None
+|ERROR|2021-11-10 23:39:56,758|Connection error: None
+|ERROR|2021-11-10 23:39:59,170|Connection error: None
+|ERROR|2021-11-10 23:40:03,042|Connection error: None
+|ERROR|2021-11-11 00:35:19,301|Connection error: None
+|ERROR|2021-11-11 00:35:21,721|Connection error: None
+|ERROR|2021-11-11 00:35:26,158|Connection error: None
+|ERROR|2021-11-11 02:35:42,835|Connection error: None
+|ERROR|2021-11-11 02:35:45,435|Connection error: None
+|ERROR|2021-11-11 03:27:59,457|Connection error: None
+|ERROR|2021-11-11 03:28:01,162|Connection error: None
+|ERROR|2021-11-11 07:28:33,750|Connection error: None
+|ERROR|2021-11-11 07:28:35,981|Connection error: None
+|ERROR|2021-11-11 07:30:15,606|Connection error: None
+|ERROR|2021-11-11 07:30:18,037|Connection error: None
+|ERROR|2021-11-11 07:56:07,909|Connection error: None
+|ERROR|2021-11-11 07:56:09,717|Connection error: None
+|ERROR|2021-11-11 07:56:14,023|Connection error: None
+|ERROR|2021-11-11 07:56:19,523|Connection error: None
+|ERROR|2021-11-11 07:56:24,740|Connection error: None
+|ERROR|2021-11-11 07:56:29,496|Connection error: None
+|ERROR|2021-11-11 07:56:34,869|Connection error: None
+|ERROR|2021-11-11 07:56:46,329|Connection error: None
+|ERROR|2021-11-11 07:56:48,785|Connection error: None
+|ERROR|2021-11-11 07:56:52,515|Connection error: None
+|ERROR|2021-11-11 07:56:57,739|Connection error: None
+|ERROR|2021-11-11 07:57:03,429|Connection error: None
+|ERROR|2021-11-11 07:57:08,854|Connection error: None
+|ERROR|2021-11-11 07:57:18,788|Connection error: None
+|ERROR|2021-11-11 07:57:20,738|Connection error: None
+|ERROR|2021-11-11 07:57:24,850|Connection error: None
+|ERROR|2021-11-11 07:57:30,256|Connection error: None
+|ERROR|2021-11-11 07:57:35,858|Connection error: None
+|ERROR|2021-11-11 07:57:41,073|Connection error: None
+|ERROR|2021-11-11 07:57:46,277|Connection error: None
+|ERROR|2021-11-11 07:57:56,137|Connection error: None
+|ERROR|2021-11-11 07:57:57,804|Connection error: None
+|ERROR|2021-11-11 07:58:01,524|Connection error: None
+|ERROR|2021-11-11 07:58:06,431|Connection error: None
+|ERROR|2021-11-11 07:58:11,229|Connection error: None
+|ERROR|2021-11-11 07:58:16,621|Connection error: None
+|ERROR|2021-11-11 07:58:21,675|Connection error: None
+|ERROR|2021-11-11 07:58:32,772|Connection error: None
+|ERROR|2021-11-11 07:58:34,438|Connection error: None
+|ERROR|2021-11-11 07:58:38,664|Connection error: None
+|ERROR|2021-11-11 07:58:43,474|Connection error: None
+|ERROR|2021-11-11 07:58:48,240|Connection error: None
