@@ -169,14 +169,23 @@ if __name__ == "__main__":
     trader = MACDTrader(instrument, bar_size, ema_s, ema_l, signal, 1)
     api = fxcmpy.fxcmpy(config_file= "fxcm.cfg")
     
-    trader.get_most_recent()
-    api.subscribe_market_data(instrument, (trader.get_tick_data, ))
-    
-    starttime = time.time()
-    timeout = time.time() + 60*60*6
-    while time.time() <= timeout:
-        time.sleep(900 - ((time.time() - starttime) % 900.0))
-        api.unsubscribe_market_data(instrument)
-        api.close()
+    if trader.api.is_connected(): 
+        try: 
+            ret = trader.get_most_recent()
+            if ret == -1: 
+                trader.api.close()
+            trader.api.subscribe_market_data(instrument, (trader.get_tick_data, ))
+        except: 
+            print("ERROR during executing mcdc instance!")
+    else: 
+        print("Client is not connected!")  
+    #===========================================================================
+    # starttime = time.time()
+    # timeout = time.time() + 60*60*6
+    # while time.time() <= timeout:
+    #     time.sleep(900 - ((time.time() - starttime) % 900.0))
+    #     api.unsubscribe_market_data(instrument)
+    #     api.close()
+    #===========================================================================
 
     
