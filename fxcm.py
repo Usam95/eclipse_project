@@ -26,7 +26,7 @@ class MACDTrader():
         self.EMA_L = EMA_L
         self.signal_mw = signal_mw
         #************************************************************************        
-    
+        self.api = None
     def connect(self):
         self.api = fxcmpy.fxcmpy(config_file= "fxcm.cfg")
 
@@ -43,16 +43,20 @@ class MACDTrader():
         print("MACD parameters: ", parameters)
         self.EMA_S, self.EMA_L, self.signal_mw = macdTester.get_parameters()
                         
-    def get_most_recent(self, period = "m5", number = 10000):
+    def get_most_recent(self, period = "m1", number = 5000):
         while True:  
-            time.sleep(5)
+            time.sleep(10)
             df = self.api.get_candles(self.instrument, number = number, period = period, columns = ["bidclose", "askclose"])
+            if len(df)==0: 
+                print("ERRROR: no data was received on calling get_candles- Method..")
+                return -1
             df[self.instrument] = (df.bidclose + df.askclose) / 2
             df = df[self.instrument].to_frame()
             df = df.resample(self.bar_length, label = "right").last().dropna().iloc[:-1]
             self.raw_data = df.copy()
             self.last_bar = self.raw_data.index[-1]
             if pd.to_datetime(datetime.utcnow()) - self.last_bar < self.bar_length:
+                #self.compute_optimal_parameters()
                 break
     
     def get_tick_data(self, data, dataframe):
@@ -68,7 +72,6 @@ class MACDTrader():
             self.tick_data[self.instrument] = (self.tick_data.Ask + self.tick_data.Bid)/2
             self.tick_data = self.tick_data[self.instrument].to_frame()
             self.resample_and_join()
-            self.compute_optimal_parameters()
             self.define_strategy() 
             self.execute_trades()
             
@@ -95,8 +98,8 @@ class MACDTrader():
     def execute_trades(self):
         
             order_info = {}
-            target_profit = 1.2
-            stop_loss = 0.85            
+            target_profit = 1.05
+            stop_loss = 0.95            
             close = self.tick_data[self.instrument].iloc[-1]
             if len(order_info) > 0:
                 target_profit_price = order_info["target_profit"]
