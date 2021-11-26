@@ -6,6 +6,8 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 plt.style.use("seaborn")
 
+from strategies.MACDBacktester import MACDBacktester as MACDTester
+
 class MACDTrader():
     
     def __init__(self, instrument, bar_length, EMA_S, EMA_L, signal_mw, units):
@@ -18,26 +20,43 @@ class MACDTrader():
         self.last_bar = None  
         self.units = units
         self.position = 0
-        
+        self.tc = 0.00007
         #*****************add strategy-specific attributes here******************
         self.EMA_S = EMA_S
         self.EMA_L = EMA_L
         self.signal_mw = signal_mw
         #************************************************************************        
-    
+        self.api = None
     def connect(self):
         self.api = fxcmpy.fxcmpy(config_file= "fxcm.cfg")
 
-    def get_most_recent(self, period = "m5", number = 500):
+    def compute_optimal_parameters(self):
+        df = self.raw_data.copy()
+        df["Close"] = df[self.instrument]
+        macdTester = MACDTester(self.instrument, df, self.EMA_S, self.EMA_L, self.signal_mw, self.tc)
+        macdTester.optimize_parameters((5,20,1), (21,50,1), (5,20,1))
+        print("MACD Test Results: ",macdTester.test_strategy())
+        parameters =  macdTester.get_parameters()
+        self.EMA_S = parameters[0]
+        self.EMA_L = parameters[1]
+        self.signal_mw = parameters[2]
+        print("MACD parameters: ", parameters)
+        self.EMA_S, self.EMA_L, self.signal_mw = macdTester.get_parameters()
+                        
+    def get_most_recent(self, period = "m1", number = 5000):
         while True:  
-            time.sleep(5)
+            time.sleep(10)
             df = self.api.get_candles(self.instrument, number = number, period = period, columns = ["bidclose", "askclose"])
+            if len(df)==0: 
+                print("ERRROR: no data was received on calling get_candles- Method..")
+                return -1
             df[self.instrument] = (df.bidclose + df.askclose) / 2
             df = df[self.instrument].to_frame()
             df = df.resample(self.bar_length, label = "right").last().dropna().iloc[:-1]
             self.raw_data = df.copy()
             self.last_bar = self.raw_data.index[-1]
             if pd.to_datetime(datetime.utcnow()) - self.last_bar < self.bar_length:
+                #self.compute_optimal_parameters()
                 break
     
     def get_tick_data(self, data, dataframe):
@@ -79,8 +98,13 @@ class MACDTrader():
     def execute_trades(self):
         
             order_info = {}
+<<<<<<< HEAD
             target_profit = 1.1
             stop_loss = 0.85            
+=======
+            target_profit = 1.05
+            stop_loss = 0.95            
+>>>>>>> e36ee9acb09f4d310856a40821577e50283f2118
             close = self.tick_data[self.instrument].iloc[-1]
             if len(order_info) > 0:
                 target_profit_price = order_info["target_profit"]
@@ -143,10 +167,11 @@ class MACDTrader():
 if __name__ == "__main__":
     instrument = "ETH/USD"
     bar_size = "5min"
-    ema_s = 19
-    ema_l = 23
-    signal = 10
+    ema_s = 12
+    ema_l = 16
+    signal = 9
     
+<<<<<<< HEAD
     start = time.time()
     
     trader = MACDTrader(instrument, bar_size, ema_s, ema_l, signal, 1)
@@ -161,4 +186,28 @@ if __name__ == "__main__":
         trader.api.unsubscribe_market_data(instrument)
         
         time.sleep(300 - ((time.time() - start) % 300.0))
+=======
+    trader = MACDTrader(instrument, bar_size, ema_s, ema_l, signal, 1)
+    api = fxcmpy.fxcmpy(config_file= "fxcm.cfg")
+    
+    if trader.api.is_connected(): 
+        try: 
+            ret = trader.get_most_recent()
+            if ret == -1: 
+                trader.api.close()
+            trader.api.subscribe_market_data(instrument, (trader.get_tick_data, ))
+        except: 
+            print("ERROR during executing mcdc instance!")
+    else: 
+        print("Client is not connected!")  
+    #===========================================================================
+    # starttime = time.time()
+    # timeout = time.time() + 60*60*6
+    # while time.time() <= timeout:
+    #     time.sleep(900 - ((time.time() - starttime) % 900.0))
+    #     api.unsubscribe_market_data(instrument)
+    #     api.close()
+    #===========================================================================
+
+>>>>>>> e36ee9acb09f4d310856a40821577e50283f2118
     
