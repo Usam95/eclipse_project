@@ -98,8 +98,13 @@ class MACDTrader():
     def execute_trades(self):
         
             order_info = {}
+<<<<<<< HEAD
+            target_profit = 1.1
+            stop_loss = 0.85            
+=======
             target_profit = 1.05
             stop_loss = 0.95            
+>>>>>>> e36ee9acb09f4d310856a40821577e50283f2118
             close = self.tick_data[self.instrument].iloc[-1]
             if len(order_info) > 0:
                 target_profit_price = order_info["target_profit"]
@@ -119,7 +124,7 @@ class MACDTrader():
                     self.position = 0 # short position
                     order_info = {}
                            
-            elif self.data["position"].iloc[-1] == 1: # signal to go long
+            if self.data["position"].iloc[-1] == 1: # signal to go long
                 if self.position == 0:
                     order = self.api.create_market_buy_order(self.instrument, self.units)
                     self.report_trade(order, "GOING LONG")# go long with full amount
@@ -137,7 +142,7 @@ class MACDTrader():
                     print(f"Stop loss: {stop_loss_price}")
                     print(f"Target: {target_profit_price}")
                     
-            elif self.data["position"].iloc[-1] == 0: # signal to go short
+            if self.data["position"].iloc[-1] == 0: # signal to go short
                 if self.position == 1:
                     order = self.api.create_market_sell_order(self.instrument, self.units)
                     self.report_trade(order, "GOING SHORT") 
@@ -166,6 +171,22 @@ if __name__ == "__main__":
     ema_l = 16
     signal = 9
     
+<<<<<<< HEAD
+    start = time.time()
+    
+    trader = MACDTrader(instrument, bar_size, ema_s, ema_l, signal, 1)
+    #trader.connect()
+    #api.close()
+    api = fxcmpy.fxcmpy(config_file= "fxcm.cfg")
+    while(True): 
+        
+
+        trader.get_most_recent()
+        trader.api.subscribe_market_data(instrument, (trader.get_tick_data, ))
+        trader.api.unsubscribe_market_data(instrument)
+        
+        time.sleep(300 - ((time.time() - start) % 300.0))
+=======
     trader = MACDTrader(instrument, bar_size, ema_s, ema_l, signal, 1)
     api = fxcmpy.fxcmpy(config_file= "fxcm.cfg")
     
@@ -188,4 +209,5 @@ if __name__ == "__main__":
     #     api.close()
     #===========================================================================
 
+>>>>>>> e36ee9acb09f4d310856a40821577e50283f2118
     
