@@ -43,7 +43,7 @@ class MACDTrader():
         print("MACD parameters: ", parameters)
         self.EMA_S, self.EMA_L, self.signal_mw = macdTester.get_parameters()
                         
-    def get_most_recent(self, period = "m1", number = 5000):
+    def get_most_recent(self, period = "m5", number = 5000):
         while True:  
             time.sleep(10)
             df = self.api.get_candles(self.instrument, number = number, period = period, columns = ["bidclose", "askclose"])
