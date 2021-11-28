@@ -324,7 +324,7 @@ class RenkoMacd:
             unreal_pl = open_pos_df.grossPL.sum()
         
             self.logger.info("{} for crypto {}".format(going, crypto))
-            self.logger.info("{}  | price = {} | Unreal. P&L = {}".format(price, unreal_pl))
+            self.logger.info("price = {} | Unreal. P&L = {}".format(price, unreal_pl))
             self.logger.info(100 * "-" + "\n")   
         #optimize parameters for next run
         
@@ -369,11 +369,11 @@ strategy.logger.info("Starting execute strategy.")
 
 #strategy.report_trade("SELL", "ETH", "0.187")
 #strategy.send_email()
-
+ 
 if strategy.con.is_connected():
     strategy.optimize_macd_params()
-  
-  
+   
+   
     # TODO: optimize macd params for each currency -> put in a function                   
     timeout = time.time() + 60*60*24*7  # 60 seconds times 60 meaning the script will run for 1 hr
     while time.time() <= timeout:
@@ -384,7 +384,7 @@ if strategy.con.is_connected():
         except KeyboardInterrupt:
             strategy.logger.error('\n\nKeyboard exception received. Exiting.')
             exit()
-      
+       
     # Close all positions and exit
     for currency in pairs:
         strategy.logger.info(f"closing all positions for {currency}.")
