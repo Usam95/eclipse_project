@@ -109,6 +109,8 @@ class HistData:
             print(f"Stored data with length: {len(df_final)} to {self.path}")
         else: 
             print(f"No data stored for {self.path}.")
+            
+            
 if __name__ == "__main__":
      
     crypto_dic = {"LTC":"LTC/USD", "EOS":"EOS/USD", "BCH":"BCH/USD"}

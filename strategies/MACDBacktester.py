@@ -47,7 +47,7 @@ class MACDBacktester():
         implements a brute force optimization for the three MACD parameters
     '''
     
-    def __init__(self, symbol, df, EMA_S, EMA_L, signal_mw, tc, **kwargs):
+    def __init__(self, symbol=None, df=None, EMA_S=12, EMA_L=26, signal_mw=9, tc=0.00007, **kwargs):
         self.symbol = symbol
         self.EMA_S = EMA_S
         self.EMA_L = EMA_L
@@ -55,8 +55,19 @@ class MACDBacktester():
         self.tc = tc
         self.results = None 
         self.df = df
-        self.get_data()
+        #self.get_data()
         self.name = "MACD"
+        
+        
+    def set_df(self, df):
+        self.df = df
+        
+        if self.df is not None:
+            self.get_data()
+        
+    def set_symbol(self, symbol):
+        self.symbol = symbol
+
     def __repr__(self):
         return "MACDBacktester(symbol = {}, MACD({}, {}, {}), start = {}, end = {})".format(self.symbol, self.EMA_S, self.EMA_L, self.signal_mw)
      
