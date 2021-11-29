@@ -41,12 +41,12 @@ from pytz import timezone
 #defining strategy parameters
 
 # crypto currency to be traded in the strategy
-pairs = ['LTC/USD','ETH/USD', 'BTC/USD']
+pairs = ['LTC/USD','ETH/USD', 'BTH/USD']
 
 #pairs = ['ETH/USD']
 
 #max capital allocated/position size for each cryptocurrency
-pos_size = {'LTC/USD':5, 'ETH/USD':2, 'BTC/USD':2}
+pos_size = {'LTC/USD':5, 'ETH/USD':2, 'BTH/USD':2}
 
 
 class RenkoMacd:
@@ -225,7 +225,7 @@ class RenkoMacd:
                 self.logger.info("Sell signal initiated from long position..")
                 
          
-       #elif l_s == "neutral":
+        #elif l_s == "neutral":
             #if df["bar_num"].tolist()[-1]>=2 and df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
                 #signal = "Buy"
                 #self.logger.info("Buy signal initiated from neutral position..")
@@ -237,6 +237,74 @@ class RenkoMacd:
             #elif df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
                 #signal = "Close"
         return signal
+    
+    
+    def execute_strategy(self):
+        
+        open_pos = self.con.get_open_positions()
+        for crypto in self.cryptos:
+            long_short = "neutral"
+            if len(open_pos)>0:
+                open_pos_cur = open_pos[open_pos["currency"]==crypto]
+                if len(open_pos_cur)>0:
+                    if open_pos_cur["isBuy"].tolist()[0]==True:
+                        long_short = "long"
+                    #elif open_pos_cur["isBuy"].tolist()[0]==False:
+                        #long_short = "neutral"   
+            data = self.con.get_candles(crypto, period='m5', number=250)
+            ohlc = data.iloc[:,[0,1,2,3,8]]
+            ohlc.columns = ["Open","Close","High","Low","Volume"]
+            
+            close_price = ohlc["Close"][-1]
+            signal = self.trade_signal(self.renko_merge(ohlc, crypto),long_short)
+    
+            if signal == "Buy":
+                self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], 
+                               time_in_force='GTC', order_type='AtMarket')
+                #self.logger.info("New long position initiated for ", crypto)
+                self.report_trade("signal == Buy", crypto, close_price)
+            elif signal == "Sell":
+                self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], 
+                               time_in_force='GTC', order_type='AtMarket')
+                self.report_trade("signal == Sell", crypto, close_price)
+                #self.logger.info("New short position initiated for ", crypto)
+                
+            #elif signal == "Close":
+                #self.con.close_all_for_symbol(crypto)
+                #self.logger.info("\n" + 100* "-")
+                #self.logger.info("signal == Close: All positions closed for ", crypto)
+                #self.logger.info("\n" + 100* "-")
+            #elif signal == "Close_Buy":
+                #self.con.close_all_for_symbol(crypto)
+                #self.logger.info("\n" + 100* "-")
+                #self.logger.info("signal == Close_Buy: Existing Short position closed for ", crypto)
+                #trade_obj = self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], 
+                            #time_in_force='GTC', order_type='AtMarket')
+                #self.logger.info("New long position initiated for ", crypto)
+                #self.report_trade("Buy", crypto, close_price)
+                
+            #elif signal == "Close_Sell":
+                #self.con.close_all_for_symbol(crypto)
+                #self.logger.info("\n" + 100* "-")
+                #self.logger.info("signal == Close_Sell: Existing long position closed for ", crypto)
+                #trade_obj = self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], 
+                            #time_in_force='GTC', order_type='AtMarket')
+                
+                
+                #self.logger.info("New short position initiated for ", crypto)
+                #self.report_trade("Going Short", crypto, close_price)
+                #self.report_trade("Sell", crypto, close_price)
+                
+    def report_trade(self, going, crypto, price):
+        open_pos_df = self.con.get_open_positions()
+        if (len(open_pos_df) > 0):
+            price = open_pos_df.open.iloc[-1]
+            unreal_pl = open_pos_df.dayPL.sum()
+        
+            self.logger.info("{} for crypto {}".format(going, crypto))
+            self.logger.info("price = {} | Dayly. P&L = {}".format(price, unreal_pl))
+            self.logger.info(100 * "-" + "\n")   
+        #optimize parameters for next run
       
     def optimize_macd_params(self):
         
@@ -279,72 +347,7 @@ class RenkoMacd:
             #self.logSetup(create_file=True)
             
             
-    def execute_strategy(self):
-        
-        open_pos = self.con.get_open_positions()
-        for crypto in self.cryptos:
-            long_short = "neutral"
-            if len(open_pos)>0:
-                open_pos_cur = open_pos[open_pos["currency"]==crypto]
-                if len(open_pos_cur)>0:
-                    if open_pos_cur["isBuy"].tolist()[0]==True:
-                        long_short = "long"
-                    #elif open_pos_cur["isBuy"].tolist()[0]==False:
-                        #long_short = "neutral"   
-            data = self.con.get_candles(crypto, period='m5', number=250)
-            ohlc = data.iloc[:,[0,1,2,3,8]]
-            ohlc.columns = ["Open","Close","High","Low","Volume"]
-            
-            close_price = ohlc["Close"][-1]
-            signal = self.trade_signal(self.renko_merge(ohlc, crypto),long_short)
-    
-            if signal == "Buy":
-                trade_obj = self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], 
-                               time_in_force='GTC', order_type='AtMarket')
-                #self.logger.info("New long position initiated for ", crypto)
-                self.report_trade("signal == Buy", crypto, close_price)
-            elif signal == "Sell":
-                trade_obj = self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], 
-                               time_in_force='GTC', order_type='AtMarket')
-                self.report_trade("signal == Sell", crypto, close_price)
-                #self.logger.info("New short position initiated for ", crypto)
-                
-            #elif signal == "Close":
-                #self.con.close_all_for_symbol(crypto)
-                #self.logger.info("\n" + 100* "-")
-                #self.logger.info("signal == Close: All positions closed for ", crypto)
-                #self.logger.info("\n" + 100* "-")
-            #elif signal == "Close_Buy":
-                #self.con.close_all_for_symbol(crypto)
-                #self.logger.info("\n" + 100* "-")
-                #self.logger.info("signal == Close_Buy: Existing Short position closed for ", crypto)
-                #trade_obj = self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], 
-                               #time_in_force='GTC', order_type='AtMarket')
-                #self.logger.info("New long position initiated for ", crypto)
-                #self.report_trade("Buy", crypto, close_price)
-                
-            #elif signal == "Close_Sell":
-                #self.con.close_all_for_symbol(crypto)
-                #self.logger.info("\n" + 100* "-")
-                #self.logger.info("signal == Close_Sell: Existing long position closed for ", crypto)
-                #trade_obj = self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], 
-                               #time_in_force='GTC', order_type='AtMarket')
-                
-                
-                #self.logger.info("New short position initiated for ", crypto)
-                #self.report_trade("Going Short", crypto, close_price)
-                #self.report_trade("Sell", crypto, close_price)
-                
-    def report_trade(self, going, crypto, price):
-        open_pos_df = self.con.get_open_positions()
-        if (len(open_pos_df) > 0):
-            price = open_pos_df.open.iloc[-1]
-            unreal_pl = open_pos_df.grossPL.sum()
-        
-            self.logger.info("{} for crypto {}".format(going, crypto))
-            self.logger.info("price = {} | Unreal. P&L = {}".format(price, unreal_pl))
-            self.logger.info(100 * "-" + "\n")   
-        #optimize parameters for next run
+
         
 
 
@@ -391,7 +394,6 @@ def main(strategy):
             #print("error encountered....skipping this iteration")
 # Continuous execution  
       
-starttime=time.time()
 
 strategy = RenkoMacd(pairs, pos_size)
 strategy.logger.info("Starting execute strategy.")
@@ -402,10 +404,14 @@ strategy.logger.info("Starting execute strategy.")
 if strategy.con.is_connected():
     strategy.logger.info("Connection to server established.")
     strategy.con.close_all()
+    time.sleep(5)
+    open_df = strategy.con.get_open_positions()
+    strategy.logger.info(f"Number of open positions: {len(open_df)}")
     strategy.logger.info("Called close_all function.")
     strategy.optimize_macd_params()
     # TODO: optimize macd params for each currency -> put in a function                   
     timeout = time.time() + 60*60*24*7  # 60 seconds times 60 meaning the script will run for 1 hr
+    starttime=time.time()
     while time.time() <= timeout:
         try:
             print("passthrough at ",time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
@@ -421,5 +427,5 @@ if strategy.con.is_connected():
         strategy.con.close_all_for_symbol(currency)
     strategy.con.close()
 else: 
-    strategy.logger.info("Could not connected to fxcm server...")
+    strategy.logger.info("Could not connected to fxcm server...Exiting..")
 
