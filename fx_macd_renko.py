@@ -41,12 +41,12 @@ from pytz import timezone
 #defining strategy parameters
 
 # crypto currency to be traded in the strategy
-pairs = ['LTC/USD','ETH/USD', 'BTH/USD']
+pairs = ['LTC/USD','ETH/USD', 'BCH/USD']
 
 #pairs = ['ETH/USD']
 
 #max capital allocated/position size for each cryptocurrency
-pos_size = {'LTC/USD':5, 'ETH/USD':2, 'BTH/USD':2}
+pos_size = {'LTC/USD':5, 'ETH/USD':2, 'BCH/USD':2}
 
 
 class RenkoMacd:
@@ -409,9 +409,11 @@ if strategy.con.is_connected():
     strategy.logger.info(f"Number of open positions: {len(open_df)}")
     strategy.logger.info("Called close_all function.")
     strategy.optimize_macd_params()
-    # TODO: optimize macd params for each currency -> put in a function                   
+    # TODO: optimize macd params for each currency -> put in a function           
+    
+    starttime=time.time()        
     timeout = time.time() + 60*60*24*7  # 60 seconds times 60 meaning the script will run for 1 hr
-    starttime=time.time()
+
     while time.time() <= timeout:
         try:
             print("passthrough at ",time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
