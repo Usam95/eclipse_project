@@ -41,12 +41,12 @@ from pytz import timezone
 #defining strategy parameters
 
 # crypto currency to be traded in the strategy
-#pairs = ['LTC/USD','ETH/USD']
+pairs = ['LTC/USD','ETH/USD', 'BTC/USD']
 
-pairs = ['ETH/USD']
+#pairs = ['ETH/USD']
 
 #max capital allocated/position size for each cryptocurrency
-pos_size = {'LTC/USD':5, 'ETH/USD':1}
+pos_size = {'LTC/USD':5, 'ETH/USD':2, 'BTC/USD':2}
 
 
 class RenkoMacd:
@@ -54,7 +54,7 @@ class RenkoMacd:
     def __init__(self, cryptos, pos_size):
         self.cryptos = cryptos 
         
-        self.con = self.connect()
+        self.connect()
         self.cryptos = cryptos
         self.pos_size = pos_size
         
@@ -69,6 +69,8 @@ class RenkoMacd:
         self.log_file_name = None
         
         self.macd_update_time = 12
+        
+        self.create_file = True
         
 #===============================================================================
 #     def logSetup(self, create_file = True):
@@ -121,12 +123,13 @@ class RenkoMacd:
             self.logger = log 
         
     def connect(self):
-        con = fxcmpy.fxcmpy(config_file= "fxcm.cfg", log_level = 'info', server='demo')
-        print("Connected to fxcm server...")
+        self.con = fxcmpy.fxcmpy(config_file= "fxcm.cfg", log_level = 'info', server='demo')
+        if self.con.is_connected(): 
+            print("Connected to fxcm server...")
         #self.logger.info("Connected to fxcm server...")
 
         #TODO: check if connection was established
-        return con
+        
     
 
     def MACD(self, DF, crypto):
@@ -258,7 +261,7 @@ class RenkoMacd:
         if now.hour == 0 and now.minute == 0 and now.seconds == 0: 
             self.send_email()
             
-            self.logSetup(create_file=True)
+            #self.logSetup(create_file=True)
             
             
     def execute_strategy(self):
@@ -284,22 +287,22 @@ class RenkoMacd:
                 trade_obj = self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], 
                                time_in_force='GTC', order_type='AtMarket')
                 #self.logger.info("New long position initiated for ", crypto)
-                self.report_trade("Buy", crypto, close_price)
+                self.report_trade("signal == Buy", crypto, close_price)
             elif signal == "Sell":
                 trade_obj = self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], 
                                time_in_force='GTC', order_type='AtMarket')
-                self.report_trade("Sell", crypto, close_price)
+                self.report_trade("signal == Sell", crypto, close_price)
                 #self.logger.info("New short position initiated for ", crypto)
                 
             elif signal == "Close":
                 self.con.close_all_for_symbol(crypto)
                 self.logger.info("\n" + 100* "-")
-                self.logger.info("All positions closed for ", crypto)
+                self.logger.info("signal == Close: All positions closed for ", crypto)
                 self.logger.info("\n" + 100* "-")
             elif signal == "Close_Buy":
                 self.con.close_all_for_symbol(crypto)
                 self.logger.info("\n" + 100* "-")
-                self.logger.info("Existing Short position closed for ", crypto)
+                self.logger.info("signal == Close_Buy: Existing Short position closed for ", crypto)
                 trade_obj = self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], 
                                time_in_force='GTC', order_type='AtMarket')
                 #self.logger.info("New long position initiated for ", crypto)
@@ -308,7 +311,7 @@ class RenkoMacd:
             elif signal == "Close_Sell":
                 self.con.close_all_for_symbol(crypto)
                 self.logger.info("\n" + 100* "-")
-                self.logger.info("Existing long position closed for ", crypto)
+                self.logger.info("signal == Close_Sell: Existing long position closed for ", crypto)
                 trade_obj = self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], 
                                time_in_force='GTC', order_type='AtMarket')
                 
@@ -356,6 +359,8 @@ class RenkoMacd:
         
 def main(strategy):
     try:
+        if not strategy.con.is_connected():
+            strategy.connect()
         strategy.execute_strategy()
         strategy.optimize_macd_params()
     except:
@@ -371,8 +376,10 @@ strategy.logger.info("Starting execute strategy.")
 #strategy.send_email()
  
 if strategy.con.is_connected():
+    
+    strategy.con.close_all()
     strategy.optimize_macd_params()
-   
+    strategy.logger.info("Called close_all function.")
    
     # TODO: optimize macd params for each currency -> put in a function                   
     timeout = time.time() + 60*60*24*7  # 60 seconds times 60 meaning the script will run for 1 hr
