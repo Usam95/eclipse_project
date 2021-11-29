@@ -209,23 +209,33 @@ class RenkoMacd:
         "function to generate signal"
         signal = ""
         df = copy.deepcopy(MERGED_DF)
-        if l_s == "":
+        if l_s == "neutral":
             if df["bar_num"].tolist()[-1]>=2 and df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
                 signal = "Buy"
-            elif df["bar_num"].tolist()[-1]<=-2 and df["macd"].tolist()[-1]<df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]<df["macd_sig_slope"].tolist()[-1]:
-                signal = "Sell"
+                self.logger.info("Buy signal initiated from neutral position..")
+            #elif df["bar_num"].tolist()[-1]<=-2 and df["macd"].tolist()[-1]<df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]<df["macd_sig_slope"].tolist()[-1]:
+                #signal = "Sell"
                 
         elif l_s == "long":
-            if df["bar_num"].tolist()[-1]<=-2 and df["macd"].tolist()[-1]<df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]<df["macd_sig_slope"].tolist()[-1]:
-                signal = "Close_Sell"
-            elif df["macd"].tolist()[-1]<df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]<df["macd_sig_slope"].tolist()[-1]:
-                signal = "Close"
+            #if df["bar_num"].tolist()[-1]<=-2 and df["macd"].tolist()[-1]<df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]<df["macd_sig_slope"].tolist()[-1]:
+                #signal = "Sell"
+                #self.logger.info("Sell signal initiated from long position..")
+            if df["macd"].tolist()[-1]<df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]<df["macd_sig_slope"].tolist()[-1]:
+                signal = "Sell"
+                self.logger.info("Sell signal initiated from long position..")
                 
-        elif l_s == "short":
-            if df["bar_num"].tolist()[-1]>=2 and df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
-                signal = "Close_Buy"
-            elif df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
-                signal = "Close"
+         
+       #elif l_s == "neutral":
+            #if df["bar_num"].tolist()[-1]>=2 and df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
+                #signal = "Buy"
+                #self.logger.info("Buy signal initiated from neutral position..")
+            #elif df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
+                #signal = "Close"
+        #elif l_s == "short":
+            #if df["bar_num"].tolist()[-1]>=2 and df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
+                #signal = "Close_Buy"
+            #elif df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
+                #signal = "Close"
         return signal
       
     def optimize_macd_params(self):
@@ -273,14 +283,14 @@ class RenkoMacd:
         
         open_pos = self.con.get_open_positions()
         for crypto in self.cryptos:
-            long_short = ""
+            long_short = "neutral"
             if len(open_pos)>0:
                 open_pos_cur = open_pos[open_pos["currency"]==crypto]
                 if len(open_pos_cur)>0:
                     if open_pos_cur["isBuy"].tolist()[0]==True:
                         long_short = "long"
-                    elif open_pos_cur["isBuy"].tolist()[0]==False:
-                        long_short = "short"   
+                    #elif open_pos_cur["isBuy"].tolist()[0]==False:
+                        #long_short = "neutral"   
             data = self.con.get_candles(crypto, period='m5', number=250)
             ohlc = data.iloc[:,[0,1,2,3,8]]
             ohlc.columns = ["Open","Close","High","Low","Volume"]
@@ -299,31 +309,31 @@ class RenkoMacd:
                 self.report_trade("signal == Sell", crypto, close_price)
                 #self.logger.info("New short position initiated for ", crypto)
                 
-            elif signal == "Close":
-                self.con.close_all_for_symbol(crypto)
-                self.logger.info("\n" + 100* "-")
-                self.logger.info("signal == Close: All positions closed for ", crypto)
-                self.logger.info("\n" + 100* "-")
-            elif signal == "Close_Buy":
-                self.con.close_all_for_symbol(crypto)
-                self.logger.info("\n" + 100* "-")
-                self.logger.info("signal == Close_Buy: Existing Short position closed for ", crypto)
-                trade_obj = self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], 
-                               time_in_force='GTC', order_type='AtMarket')
+            #elif signal == "Close":
+                #self.con.close_all_for_symbol(crypto)
+                #self.logger.info("\n" + 100* "-")
+                #self.logger.info("signal == Close: All positions closed for ", crypto)
+                #self.logger.info("\n" + 100* "-")
+            #elif signal == "Close_Buy":
+                #self.con.close_all_for_symbol(crypto)
+                #self.logger.info("\n" + 100* "-")
+                #self.logger.info("signal == Close_Buy: Existing Short position closed for ", crypto)
+                #trade_obj = self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], 
+                               #time_in_force='GTC', order_type='AtMarket')
                 #self.logger.info("New long position initiated for ", crypto)
-                self.report_trade("Buy", crypto, close_price)
+                #self.report_trade("Buy", crypto, close_price)
                 
-            elif signal == "Close_Sell":
-                self.con.close_all_for_symbol(crypto)
-                self.logger.info("\n" + 100* "-")
-                self.logger.info("signal == Close_Sell: Existing long position closed for ", crypto)
-                trade_obj = self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], 
-                               time_in_force='GTC', order_type='AtMarket')
+            #elif signal == "Close_Sell":
+                #self.con.close_all_for_symbol(crypto)
+                #self.logger.info("\n" + 100* "-")
+                #self.logger.info("signal == Close_Sell: Existing long position closed for ", crypto)
+                #trade_obj = self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], 
+                               #time_in_force='GTC', order_type='AtMarket')
                 
                 
-                self.logger.info("New short position initiated for ", crypto)
+                #self.logger.info("New short position initiated for ", crypto)
                 #self.report_trade("Going Short", crypto, close_price)
-                self.report_trade("Sell", crypto, close_price)
+                #self.report_trade("Sell", crypto, close_price)
                 
     def report_trade(self, going, crypto, price):
         open_pos_df = self.con.get_open_positions()
