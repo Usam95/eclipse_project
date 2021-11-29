@@ -295,9 +295,9 @@ class RenkoMacd:
                 
     def report_trade(self, going, crypto, price):
         time.sleep(2)
-        open_pos_df = self.con.get_open_positions()    
-        price = open_pos_df.open.iloc[-1]
-        day_pl = self.com.get_accounts_summary()['dayPL'][0]
+        #open_pos_df = self.con.get_open_positions()    
+        #price = open_pos_df.open.iloc[-1]
+        day_pl = self.con.get_accounts_summary()['dayPL'][0]
         
         self.logger.info("{} for crypto {}".format(going, crypto))
         self.logger.info("price = {} | Dayly. P&L = {}".format(price, day_pl))
@@ -310,7 +310,7 @@ class RenkoMacd:
         if self.macd_update_time >=36: 
             for crypto in self.cryptos: 
                 self.macd_str.set_symbol(crypto)  
-                df = self.con.get_candles(crypto, period='m5', number=1000)
+                df = self.con.get_candles(crypto, period='m5', number=3000)
                 if len(df) > 0:
                     df = df.iloc[:,[0,1,2,3,8]]
                     df.columns = ["Open","Close","High","Low","Volume"]
@@ -321,7 +321,8 @@ class RenkoMacd:
                     params = self.macd_str.get_parameters()
                     self.macd_params[crypto] = params
                     self.logger.info(f"Updated parameters for {crypto}|| a: {params[0]}, b: {params[1]}, c: {params[2]}")
-   
+                    perf, outperf = self.macd_str.test_strategy()
+                    self.logger.info(f"Perf: {perf}, Outperf: {outperf}.")
                  
                 else: 
                     self.logger.info(f"Not candles data was received for crypto: {crypto}")
