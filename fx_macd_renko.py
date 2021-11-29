@@ -68,7 +68,7 @@ class RenkoMacd:
         self.logSetup(create_file=True)
         self.log_file_name = None
         
-        self.macd_update_time = 12
+        self.macd_update_time = 36
         
         self.create_file = True
         
@@ -241,10 +241,10 @@ class RenkoMacd:
     def optimize_macd_params(self):
         
         start_t = time.time()
-        if self.macd_update_time >=12: 
+        if self.macd_update_time >=36: 
             for crypto in self.cryptos: 
                 self.macd_str.set_symbol(crypto)  
-                df = self.con.get_candles(crypto, period='m5', number=5000)
+                df = self.con.get_candles(crypto, period='m5', number=1000)
                 if len(df) > 0:
                     df = df.iloc[:,[0,1,2,3,8]]
                     df.columns = ["Open","Close","High","Low","Volume"]
