@@ -230,10 +230,11 @@ class RenkoMacd:
       
     def optimize_macd_params(self):
         
+        start_t = time.time()
         if self.macd_update_time >=12: 
             for crypto in self.cryptos: 
                 self.macd_str.set_symbol(crypto)  
-                df = self.con.get_candles(crypto, period='m5', number=9000)
+                df = self.con.get_candles(crypto, period='m5', number=5000)
                 if len(df) > 0:
                     df = df.iloc[:,[0,1,2,3,8]]
                     df.columns = ["Open","Close","High","Low","Volume"]
@@ -243,11 +244,15 @@ class RenkoMacd:
                     self.macd_str.optimize_parameters((5,20,1), (21,50,1), (5,20,1))
                     params = self.macd_str.get_parameters()
                     self.macd_params[crypto] = params
+                    self.logger.info(f"Updated parameters for {crypto}|| a: {params[0]}, b: {params[1]}, c: {params[2]}")
    
                  
                 else: 
                     self.logger.info(f"Not candles data was received for crypto: {crypto}")
-            self.macd_update_time = 0  
+            self.macd_update_time = 0 
+            end_t = time.time()
+            dur_t = end_t - start_t
+            self.logger.info(f"Total time took to update parameters: {dur_t/60} mins.")
         else:  
             self.macd_update_time +=1
         #=======================================================================
@@ -358,13 +363,22 @@ class RenkoMacd:
             smtp.sendmail(fromEmail, toEmail, msg.as_string())
         
 def main(strategy):
-    try:
+    
         if not strategy.con.is_connected():
             strategy.connect()
-        strategy.execute_strategy()
-        strategy.optimize_macd_params()
-    except:
-        print("error encountered....skipping this iteration")
+            if strategy.con.is_connected(): 
+                strategy.logger.info("Connection to server re-established.")
+            else:
+                strategy.logger.error("Connection to server lost...will try reconnecte in next iteration")
+        elif strategy.con.is_connected():
+            try:
+                strategy.execute_strategy()
+                strategy.optimize_macd_params()
+            except:
+                strategy.logger.error("error encountered during execute_strategy...skipping this iteration")
+        #else:  
+            #strategy.logger.error("error encountered during execute_strategy...skipping this iteration")
+            #print("error encountered....skipping this iteration")
 # Continuous execution  
       
 starttime=time.time()
@@ -376,11 +390,10 @@ strategy.logger.info("Starting execute strategy.")
 #strategy.send_email()
  
 if strategy.con.is_connected():
-    
+    strategy.logger.info("Connection to server established.")
     strategy.con.close_all()
-    strategy.optimize_macd_params()
     strategy.logger.info("Called close_all function.")
-   
+    strategy.optimize_macd_params()
     # TODO: optimize macd params for each currency -> put in a function                   
     timeout = time.time() + 60*60*24*7  # 60 seconds times 60 meaning the script will run for 1 hr
     while time.time() <= timeout:
