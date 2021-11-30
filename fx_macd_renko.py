@@ -263,13 +263,11 @@ class RenkoMacd:
             signal = self.trade_signal(self.renko_merge(ohlc, crypto),long_short)
     
             if signal == "Buy":
-                self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], 
-                               time_in_force='GTC', order_type='AtMarket')
+                self.con.open_trade(symbol=crypto, is_buy=True, amount=pos_size[crypto], time_in_force='GTC', order_type='AtMarket')
                 #self.logger.info("New long position initiated for ", crypto)
                 self.report_trade("signal == Buy", crypto, close_price)
             elif signal == "Sell":
-                self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], 
-                               time_in_force='GTC', order_type='AtMarket')
+                self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], time_in_force='GTC', order_type='AtMarket')
                 self.report_trade("signal == Sell", crypto, close_price)
                 #self.logger.info("New short position initiated for ", crypto)
                 
@@ -300,14 +298,14 @@ class RenkoMacd:
                 #self.report_trade("Sell", crypto, close_price)
                 
     def report_trade(self, going, crypto, price):
-        open_pos_df = self.con.get_open_positions()
-        if (len(open_pos_df) > 0):
-            price = open_pos_df.open.iloc[-1]
-            unreal_pl = open_pos_df.dayPL.sum()
+        time.sleep(2)
+        #open_pos_df = self.con.get_open_positions()    
+        #price = open_pos_df.open.iloc[-1]
+        day_pl = self.con.get_accounts_summary()['dayPL'][0]
         
-            self.logger.info("{} for crypto {}".format(going, crypto))
-            self.logger.info("price = {} | Dayly. P&L = {}".format(price, unreal_pl))
-            self.logger.info(100 * "-" + "\n")   
+        self.logger.info("{} for crypto {}".format(going, crypto))
+        self.logger.info("price = {} | Dayly. P&L = {}".format(price, day_pl))
+        self.logger.info(100 * "-" + "\n")   
         #optimize parameters for next run
       
     def optimize_macd_params(self):
@@ -316,7 +314,7 @@ class RenkoMacd:
         if self.macd_update_time >=36: 
             for crypto in self.cryptos: 
                 self.macd_str.set_symbol(crypto)  
-                df = self.con.get_candles(crypto, period='m5', number=1000)
+                df = self.con.get_candles(crypto, period='m5', number=3000)
                 if len(df) > 0:
                     df = df.iloc[:,[0,1,2,3,8]]
                     df.columns = ["Open","Close","High","Low","Volume"]
@@ -327,7 +325,8 @@ class RenkoMacd:
                     params = self.macd_str.get_parameters()
                     self.macd_params[crypto] = params
                     self.logger.info(f"Updated parameters for {crypto}|| a: {params[0]}, b: {params[1]}, c: {params[2]}")
-   
+                    perf, outperf = self.macd_str.test_strategy()
+                    self.logger.info(f"Perf: {perf}, Outperf: {outperf}.")
                  
                 else: 
                     self.logger.info(f"Not candles data was received for crypto: {crypto}")
@@ -382,11 +381,13 @@ class RenkoMacd:
 def main(strategy):
     
         if not strategy.con.is_connected():
+            strategy.con.close()
+            time.sleep(15)
             strategy.connect()
             if strategy.con.is_connected(): 
                 strategy.logger.info("Connection to server re-established.")
             else:
-                strategy.logger.error("Connection to server lost...will try reconnecte in next iteration")
+                strategy.logger.error("Connection to server lost...will try to reconnect in next iteration")
         elif strategy.con.is_connected():
             try:
                 strategy.execute_strategy()
