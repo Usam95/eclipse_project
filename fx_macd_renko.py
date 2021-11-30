@@ -231,7 +231,8 @@ class RenkoMacd:
                 #self.logger.info("Buy signal initiated from neutral position..")
             #elif df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
                 #signal = "Close"
-        #elif l_s == "short":
+        elif l_s == "short":
+            return signal
             #if df["bar_num"].tolist()[-1]>=2 and df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
                 #signal = "Close_Buy"
             #elif df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
@@ -249,6 +250,9 @@ class RenkoMacd:
                 if len(open_pos_cur)>0:
                     if open_pos_cur["isBuy"].tolist()[0]==True:
                         long_short = "long"
+                    elif open_pos_cur["isBuy"].tolist()[0]==False: 
+                        long_short = "short"
+                        
                     #elif open_pos_cur["isBuy"].tolist()[0]==False:
                         #long_short = "neutral"   
             data = self.con.get_candles(crypto, period='m5', number=250)
