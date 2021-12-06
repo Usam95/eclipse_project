@@ -191,8 +191,21 @@ class RenkoMacd:
                 st_loss = round(atr,1)
                 tk_profit = round(price * self.tk_profit,1)
                 
+                if len(order_df) > 0: 
+                    self.logger.info("In 1: len(order_df) > 0: ")
+                    self.logger.info(f"Number of orders: {len(order_df)}")
+                    if order_df[order_df['currency']==crypto]:
+                        
+                        order_id = order_df[order_df['currency']==crypto]['orderId']
+                        order = self.con.get_order(order_id)
+                        if order.get_status() == 'waiting': 
+                            self.con.change_order_stop_limit(order_id, stop=st_loss, limit=tk_profit)
+                        self.logger.info(f"Updated Stop Loss for available order for {crypto}..")
+                
                 if len(open_pos_df)==0:
-                    self.logger.info("In 1: len(open_pos_df)==0:")
+                    self.logger.info("In 2: len(open_pos_df)==0:")
+                    #self.logger.info(f"Number of positions: {len(open_pos_df)}")
+
                     if df["bar_num"].tolist()[-1]>=2 and df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
 
                         self.con.open_trade(symbol = crypto, is_buy = True,
@@ -203,7 +216,9 @@ class RenkoMacd:
                         self.report_trade("Going long from neutral", crypto, price)
                                     
                 elif len(open_pos_df)!=0 and len(open_pos_df[open_pos_df['currency'] == crypto]) == 0:
-                    self.logger.info("In 2: len(open_pos_df)!=0 and len(open_pos_df[open_pos_df['currency'] == crypto]) == 0:")
+                    self.logger.info("In 3: len(open_pos_df)!=0 and len(open_pos_df[open_pos_df['currency'] == crypto]) == 0:")
+                    self.logger.info(f"Number of positions: {len(open_pos_df)}")
+
                     if df["bar_num"].tolist()[-1]>=2 and df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
                         
                         self.con.open_trade(symbol = crypto, is_buy = True,
@@ -214,8 +229,10 @@ class RenkoMacd:
                         self.report_trade("Going long from neutral", crypto, price)
                        
                 elif len(open_pos_df)!=0 and len(open_pos_df[open_pos_df['currency'] == crypto]) > 0:
-                    
-                    self.logger.info("In 3: len(open_pos_df)!=0 and len(open_pos_df[open_pos_df['currency'] == crypto]) > 0:")
+
+                    self.logger.info("In 4: len(open_pos_df)!=0 and len(open_pos_df[open_pos_df['currency'] == crypto]) > 0:")
+                    self.logger.info(f"Number of positions: {len(open_pos_df)}")
+
                     if df["macd"].tolist()[-1]<df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]<df["macd_sig_slope"].tolist()[-1]:
                         self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], time_in_force='GTC', order_type='AtMarket')
                         self.report_trade("Going neutral from long", crypto, price)
@@ -223,15 +240,7 @@ class RenkoMacd:
                         self.con.change_trade_stop_limit(trade_id = open_pos_df[open_pos_df['currency'] == crypto]['tradeId'], is_in_pips = False, is_stop = True, rate = st_loss)
                         self.logger.info(f"Updated Stop Loss for open position for:{crypto}..")
                         
-                elif len(order_df) > 0: 
-                    self.logger.info("In 4: len(order_df) > 0: ")
-                    if order_df[order_df['currency']==crypto]:
-                        
-                        order_id = order_df[order_df['currency']==crypto]['orderId']
-                        order = self.con.get_order(order_id)
-                        if order.get_status() == 'waiting': 
-                            self.con.change_order_stop_limit(order_id, stop=st_loss, limit=tk_profit)
-                        self.logger.info(f"Updated Stop Loss for available order for {crypto}..")
+
 
                         
     def report_trade(self, msg, crypto, price):
@@ -289,9 +298,6 @@ starttime=time.time()
 timeout = time.time() + 60*60*24*7  # 60 seconds times 60 meaning the script will run for 1 hr
 first_pass = True
 while time.time() <= timeout:
-    if first_pass:
-        strategy.con.close()
-        strategy.con.connect()
     if strategy.con.is_connected():
         
         if first_pass: 
