@@ -251,6 +251,8 @@ class RenkoMacd:
         self.logger.info("Price = {} | Dayly. P&L = {}".format(price, day_pl))
         self.logger.info(100 * "-" + "\n")   
         
+        self.logger.info(f"Number of open orders: {len(strategy.con.get_order_ids())}")
+        
     def optimize_macd_params(self):
         
         start_t = time.time()
@@ -281,41 +283,45 @@ class RenkoMacd:
             self.macd_update_time += 1
             
             
-strategy = RenkoMacd(pairs, pos_size)
-strategy.logger.info("Strategy initialized. Trying to start program execution.")
+
 
 #strategy.report_trade("SELL", "ETH", "0.187")
 #strategy.send_email()
 
+def first_pass(strategy):
+    open_pos_df = strategy.con.get_open_positions()
+    if len(open_pos_df) > 0: 
+        strategy.con.close_all()
+        strategy.logger.info(f"Closed {len(open_pos_df)} open positions.")
+    
+    order_ids_df = strategy.con.get_order_ids()
+    if len(order_ids_df) > 0: 
+        for order_id in order_ids_df: 
+            strategy.con.delete_order(order_id)
+        strategy.logger.info(f"Closed {len(order_id)} open orders.")
+    
+    strategy.logger.info("First pass: optimizing parameters..")   
+    
+    strategy.optimize_macd_params()
+    
 def main(strategy):
 
     strategy.execute_strategy()
     strategy.optimize_macd_params()
 
 
+strategy = RenkoMacd(pairs, pos_size)
+strategy.logger.info("Strategy initialized. Trying to start program execution.")
+
+first_pass(strategy)
+
 
 starttime=time.time()        
 timeout = time.time() + 60*60*24*7  # 60 seconds times 60 meaning the script will run for 1 hr
-first_pass = True
+
+
 while time.time() <= timeout:
     if strategy.con.is_connected():
-        
-        if first_pass: 
-            
-            open_pos_df = strategy.con.get_open_positions()
-            if len(open_pos_df) > 0: 
-                strategy.con.close_all()
-                strategy.logger.info(f"Closed {len(open_pos_df)} open positions.")
-            
-            order_ids_df = strategy.con.get_order_ids()
-            if len(order_ids_df) > 0: 
-                for order_id in order_ids_df: 
-                    strategy.con.delete_order(order_id)
-                strategy.logger.info(f"Closed {len(order_id)} open orders.")
-            
-            strategy.logger.info("First pass: optimizing parameters..")   
-            strategy.optimize_macd_params()
-            first_pass = False
         # TODO: optimize macd params for each currency -> put in a function           
 
         try:
@@ -345,4 +351,3 @@ while time.time() <= timeout:
         strategy.con.close()
         time.sleep(30)
         strategy.connect()
-                   
