@@ -43,61 +43,56 @@ class RenkoMacd:
     def __init__(self, cryptos, pos_size):
         self.cryptos = cryptos 
         
+        
+        #initialiue log file
+        self.log_file_name = None
+        self.logger = None
+        self.create_file = True
+        self.logSetup(create_file=True)
+
         self.connect()
         self.cryptos = cryptos
         self.pos_size = pos_size
         
         self.macd_str = MACDTester(EMA_S=12, EMA_L=26, signal_mw=9)
-        
         self.macd_params = {
             'LTC/USD': (12,26,9), 
             'ETH/USD': (12,26,9), 
             'BCH/USD': (12,26,9)
-            }
-        
-        self.logger = None
-        
-        #initialiue log file
-        self.logSetup(create_file=True)
-        self.log_file_name = None
-        
+        }
         self.macd_update_time = 36
-        
-        self.create_file = True
-        self.tk_profit = 0.05
-        
-        
+                
         self.position_info = {}
         self.take_profit_pct = 0.1
         self.stop_loss_pct = 0.05
 
     def logSetup(self, create_file=False):
     
-            # create logger for prd_ci
-            self.log_file_name = datetime.now().strftime('logs/logfile_%d_%m_%Y.log')
-            
-            log = logging.getLogger(self.log_file_name)
-            log.setLevel(level=logging.INFO)
-    
-            # create formatter and add it to the handlers
-            formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(funcName)-16s %(message)s',
-                                          datefmt='%m-%d-%y %H:%M:%S')
-            if create_file:
-                # create file handler for logger.
-                fh = logging.FileHandler(self.log_file_name)
-                fh.setLevel(level=logging.INFO)
-                fh.setFormatter(formatter)
-            # reate console handler for logger.
-            ch = logging.StreamHandler()
-            ch.setLevel(level=logging.INFO)
-            ch.setFormatter(formatter)
-    
-            # add handlers to logger.
-            if create_file:
-                log.addHandler(fh)
-    
-            log.addHandler(ch)
-            self.logger = log 
+        # create logger for prd_ci
+        self.log_file_name = datetime.now().strftime('logs/logfile_%d_%m_%Y.log')
+        
+        log = logging.getLogger(self.log_file_name)
+        log.setLevel(level=logging.INFO)
+
+        # create formatter and add it to the handlers
+        formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(funcName)-16s %(message)s',
+                                      datefmt='%m-%d-%y %H:%M:%S')
+        if create_file:
+            # create file handler for logger.
+            fh = logging.FileHandler(self.log_file_name)
+            fh.setLevel(level=logging.INFO)
+            fh.setFormatter(formatter)
+        # reate console handler for logger.
+        ch = logging.StreamHandler()
+        ch.setLevel(level=logging.INFO)
+        ch.setFormatter(formatter)
+
+        # add handlers to logger.
+        if create_file:
+            log.addHandler(fh)
+
+        log.addHandler(ch)
+        self.logger = log 
         
     def connect(self):
         self.con = fxcmpy.fxcmpy(config_file= "fxcm.cfg", log_level = 'info', server='demo') 
