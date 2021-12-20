@@ -245,7 +245,9 @@ class RenkoMacd:
         open_pos = self.con.get_open_positions()
         for crypto in self.cryptos:
             long_short = "neutral"
-            if len(open_pos)>0:
+            if len(open_pos) == 0:
+                
+                
                 open_pos_cur = open_pos[open_pos["currency"]==crypto]
                 if len(open_pos_cur)>0:
                     if open_pos_cur["isBuy"].tolist()[0]==True:
@@ -406,33 +408,51 @@ strategy.logger.info("Starting execute strategy.")
 #strategy.report_trade("SELL", "ETH", "0.187")
 #strategy.send_email()
  
-if strategy.con.is_connected():
-    strategy.logger.info("Connection to server established.")
-    strategy.con.close_all()
-    time.sleep(5)
-    open_df = strategy.con.get_open_positions()
-    strategy.logger.info(f"Number of open positions: {len(open_df)}")
-    strategy.logger.info("Called close_all function.")
-    strategy.optimize_macd_params()
-    # TODO: optimize macd params for each currency -> put in a function           
-    
-    starttime=time.time()        
-    timeout = time.time() + 60*60*24*7  # 60 seconds times 60 meaning the script will run for 1 hr
+starttime=time.time()        
+timeout = time.time() + 60*60*24*7  # 60 seconds times 60 meaning the script will run for 1 hr
+first_pass = True
+while time.time() <= timeout:
+    if strategy.con.is_connected():
+        
+        if first_pass: 
+            open_pos_df = strategy.con.get_open_positions()
+            if len(open_pos_df) > 0: 
+                strategy.con.close_all()
+                strategy.logger.info(f"Closed {len(open_pos_df)} open positions.")
+            order_id = strategy.con.get_order_ids()
+            if len(order_id) > 0: 
+                for order_id in order_id: 
+                    strategy.con.delete_order(order_id)
+                strategy.logger.info(f"Closed {len(order_id)} open orders.")
+            time.sleep(5)
+            open_df = strategy.con.get_open_positions()
+            strategy.logger.info(f"Number of open positions: {len(open_df)}")
 
-    while time.time() <= timeout:
+            strategy.optimize_macd_params()
+        # TODO: optimize macd params for each currency -> put in a function           
+
         try:
             print("passthrough at ",time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
             main(strategy)
             time.sleep(300 - ((time.time() - starttime) % 300.0)) # 5 minute interval between each new execution
         except KeyboardInterrupt:
             strategy.logger.error('\n\nKeyboard exception received. Exiting.')
-            exit()
-       
-    # Close all positions and exit
-    for currency in pairs:
-        strategy.logger.info(f"closing all positions for {currency}.")
-        strategy.con.close_all_for_symbol(currency)
-    strategy.con.close()
-else: 
-    strategy.logger.info("Could not connected to fxcm server...Exiting..")
-
+            strategy.con.close()
+        except: 
+            strategy.logger.error("Error occured during strategy execution. Wait 1 minute and try again.")
+            strategy.con.close()
+            time.sleep(30)
+            strategy.connect()
+            time.sleep(30)
+        # Close all positions and exit
+        #===========================================================================
+        # for currency in pairs:
+        #     strategy.logger.info(f"closing all positions for {currency}.")
+        #     strategy.con.close_all_for_symbol(currency)
+        # strategy.con.close()
+        #===========================================================================
+    else: 
+        strategy.logger.error('Connection issue, reseting connection.')
+        strategy.con.close()
+        time.sleep(30)
+        strategy.connect()

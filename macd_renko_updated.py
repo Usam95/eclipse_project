@@ -64,7 +64,7 @@ class RenkoMacd:
                 
         self.position_info = {}
         self.take_profit_pct = 0.1
-        self.stop_loss_pct = 0.05
+        self.stop_loss_pct = 0.1
 
     def logSetup(self, create_file=False):
     
@@ -215,9 +215,6 @@ class RenkoMacd:
                 #order_df = self.con.get_orders()
                 atr = self.ATR(ohlc, 60)["ATR"][-1]
                 
-                st_loss = round(atr,1)
-                tk_profit = round(cur_price * self.tk_profit,1)
-                
                 #===============================================================
                 # if len(order_df) > 0: 
                 #     self.logger.info("In 1: len(order_df) > 0: ")
@@ -253,11 +250,7 @@ class RenkoMacd:
 
                     if df["bar_num"].tolist()[-1]>=2 and df["macd"].tolist()[-1]>df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]>df["macd_sig_slope"].tolist()[-1]:
                         
-                        self.con.open_trade(symbol = crypto, is_buy = True,
-                                           amount = pos_size[crypto],
-                                           time_in_force = 'GTC', stop = st_loss, limit = tk_profit,
-                                           trailing_step = False, order_type = 'AtMarket')
-                         
+                        self.con.open_trade(symbol = crypto, is_buy = True, amount = pos_size[crypto], time_in_force = 'GTC', order_type = 'AtMarket')
                         self.report_trade("Going long from neutral", crypto, cur_price)
                         self.store_position_data(crypto, cur_price)
                        
@@ -269,16 +262,17 @@ class RenkoMacd:
                     if cur_price <= self.position_info[crypto][0]:
                         self.logger(f"Stop loss triggered for: {crypto}.")
                         self.report_trade("Going neutral from long", crypto, cur_price)
-                        self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], time_in_force='GTC', order_type='AtMarket')
-                        
+                        #self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], time_in_force='GTC', order_type='AtMarket')
+                        self.con.close_all_for_symbol(crypto, order_type='AtMarket')
                     elif cur_price >= self.position_info[crypto][1]:
                         self.logger(f"Take profit triggered for: {crypto}.")
                         self.report_trade("Going neutral from long", crypto, cur_price)
-                        self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], time_in_force='GTC', order_type='AtMarket')
-
+                        #self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], time_in_force='GTC', order_type='AtMarket')
+                        self.con.close_all_for_symbol(crypto, order_type='AtMarket')
                     elif df["macd"].tolist()[-1]<df["macd_sig"].tolist()[-1] and df["macd_slope"].tolist()[-1]<df["macd_sig_slope"].tolist()[-1]:
                         self.con.open_trade(symbol=crypto, is_buy=False, amount=pos_size[crypto], time_in_force='GTC', order_type='AtMarket')
                         self.report_trade("Going neutral from long", crypto, cur_price)
+                        self.con.close_all_for_symbol(crypto, order_type='AtMarket')
                     #===========================================================
                     # else: 
                     #     self.con.change_trade_stop_limit(trade_id = open_pos_df[open_pos_df['currency'] == crypto]['tradeId'], is_in_pips = False, is_stop = True, rate = st_loss)
@@ -289,12 +283,12 @@ class RenkoMacd:
     def init_portfolio(self):
         for crypto in self.cryptos:
             self.con.open_trade(symbol = crypto, is_buy = True, amount = pos_size[crypto], time_in_force = 'GTC', order_type = 'AtMarket')
+            cur_price = self.con.get_last_price(crypto).Bid
+            self.store_position_data(crypto, cur_price)
             
         pos_df = self.con.get_open_positions()
         self.logger.info("Portfolio initialized.")
-        self.logger.info(f"In total: {len(pos_df)} open positions.")
-        self.logger.info("Portfolio initialized.")
-        
+        self.logger.info(f"In total: {len(pos_df)} open positions.")        
            
     def report_trade(self, msg, crypto, price):
         time.sleep(2)
@@ -380,10 +374,11 @@ def first_pass(strategy):
     if len(order_ids_df) > 0: 
         for order_id in order_ids_df: 
             strategy.con.delete_order(order_id)
-        strategy.logger.info(f"Closed {len(order_id)} open orders.")
+        strategy.logger.info(f"Closed {len(order_ids_df)} open orders.")
+    
+    strategy.init_portfolio()
     
     strategy.logger.info("First pass: optimizing parameters..")   
-    strategy.init_portfolio()
     strategy.optimize_macd_params()
     
     t = time.localtime()
