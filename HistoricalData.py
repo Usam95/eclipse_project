@@ -31,6 +31,8 @@ class HistData:
         self.crypto = crypto
         
         self.create_path()
+        
+        
     def create_path(self):
         folder = str("./hist_data/"+self.crypto+"/"+self.period)
         if os.path.exists(folder): 
